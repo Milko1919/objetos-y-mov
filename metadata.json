@@ -1,0 +1,6 @@
+{
+  "name": "MotionKids: Science Adventures with Pip",
+  "description": "A playful Duolingo-style science learning app for kids covering Objects in Motion, forces, friction, gravity, and simple machines with interactive quizzes, English voice, and rewards.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

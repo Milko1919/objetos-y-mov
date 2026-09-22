@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { UserProgress } from '../types';
 import { soundManager } from '../utils/audio';
 import { getLevelStatus, SCIENCE_LEVELS } from '../utils/levels';
-import { Volume2, VolumeX, Sparkles, Trophy, Heart, Flame, Star, Award, X } from 'lucide-react';
+import { Volume2, VolumeX, Sparkles, Trophy, Heart, Flame, Star, Award, X, BookOpen } from 'lucide-react';
 
 interface NavbarProps {
   progress: UserProgress;
@@ -10,6 +10,7 @@ interface NavbarProps {
   onToggleMute: () => void;
   onOpenShop: () => void;
   onOpenBadges: () => void;
+  onOpenJournal: () => void;
   showSpanishHint: boolean;
   onToggleSpanishHint: () => void;
   onHeartRefill: () => void;
@@ -21,6 +22,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onToggleMute,
   onOpenShop,
   onOpenBadges,
+  onOpenJournal,
   showSpanishHint,
   onToggleSpanishHint,
   onHeartRefill,
@@ -180,6 +182,24 @@ export const Navbar: React.FC<NavbarProps> = ({
           <span className="text-xs sm:text-sm font-black text-rose-600">
             {progress.hearts}
           </span>
+        </button>
+
+        {/* Pip's Field Journal Button */}
+        <button
+          onClick={() => {
+            soundManager.playPop();
+            onOpenJournal();
+          }}
+          className="px-2 sm:px-2.5 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border-2 border-amber-300 transition flex items-center gap-1.5 cursor-pointer shadow-xs active:scale-95"
+          title="Pip's Science Journal - Mastered Concepts"
+        >
+          <BookOpen className="w-4 h-4 text-amber-600" />
+          <div className="flex items-center gap-1">
+            <span className="text-xs font-black hidden md:inline">Journal</span>
+            <span className="text-[10px] font-black bg-amber-500 text-white px-1.5 py-0.5 rounded-full leading-none">
+              {progress.completedTerms ? progress.completedTerms.length : 0}
+            </span>
+          </div>
         </button>
 
         {/* Badges / Trophies */}

@@ -7,6 +7,7 @@ import { RewardModal } from './components/RewardModal';
 import { ShopModal } from './components/ShopModal';
 import { BadgesModal } from './components/BadgesModal';
 import { LevelUpOverlay } from './components/LevelUpOverlay';
+import { PipsJournalModal } from './components/PipsJournalModal';
 import { LESSON_UNITS } from './data/lessonsData';
 import { LessonUnit, UserProgress, AccessoryId } from './types';
 import { soundManager, speakEnglish } from './utils/audio';
@@ -73,6 +74,7 @@ export default function App() {
   // Modals
   const [isShopOpen, setIsShopOpen] = useState(false);
   const [isBadgesOpen, setIsBadgesOpen] = useState(false);
+  const [isJournalOpen, setIsJournalOpen] = useState(false);
   const [rewardData, setRewardData] = useState<{
     isOpen: boolean;
     title: string;
@@ -81,6 +83,15 @@ export default function App() {
     gems: number;
     accuracy?: number;
   } | null>(null);
+
+  // Jump directly to an interactive science term from Pip's Journal
+  const handleJumpToTerm = (unitId: string, termId: string) => {
+    const targetUnit = LESSON_UNITS.find((u) => u.id === unitId) || LESSON_UNITS[0];
+    setActiveUnit(targetUnit);
+    setActiveTermId(termId);
+    setCurrentView('learn');
+    setIsJournalOpen(false);
+  };
 
   // Screen-overlay animation state when user levels up
   const [levelUpData, setLevelUpData] = useState<{
@@ -351,6 +362,7 @@ export default function App() {
         onToggleMute={handleToggleMute}
         onOpenShop={() => setIsShopOpen(true)}
         onOpenBadges={() => setIsBadgesOpen(true)}
+        onOpenJournal={() => setIsJournalOpen(true)}
         showSpanishHint={showSpanishHint}
         onToggleSpanishHint={() => setShowSpanishHint((prev) => !prev)}
         onHeartRefill={handleRefillHearts}
@@ -367,6 +379,7 @@ export default function App() {
             onClaimChest={handleClaimChest}
             claimedChests={claimedChests}
             onResetProgress={() => setShowResetModal(true)}
+            onOpenJournal={() => setIsJournalOpen(true)}
           />
         )}
 
@@ -440,6 +453,16 @@ export default function App() {
         <BadgesModal
           progress={progress}
           onClose={() => setIsBadgesOpen(false)}
+        />
+      )}
+
+      {/* Pip's Science Field Journal Modal */}
+      {isJournalOpen && (
+        <PipsJournalModal
+          progress={progress}
+          showSpanishHint={showSpanishHint}
+          onClose={() => setIsJournalOpen(false)}
+          onJumpToTerm={handleJumpToTerm}
         />
       )}
 

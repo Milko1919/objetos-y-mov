@@ -14,6 +14,7 @@ interface UnitPathProps {
   onClaimChest: (unitId: string) => void;
   claimedChests: string[];
   onResetProgress?: () => void;
+  onOpenJournal?: () => void;
 }
 
 interface PathNode {
@@ -38,6 +39,7 @@ export const UnitPath: React.FC<UnitPathProps> = ({
   onClaimChest,
   claimedChests,
   onResetProgress,
+  onOpenJournal,
 }) => {
   const completedTerms = progress.completedTerms || [];
 
@@ -241,19 +243,47 @@ export const UnitPath: React.FC<UnitPathProps> = ({
         </div>
       </div>
 
-      {/* Reset to Step 1 Button (for Parent / Testing) */}
-      {onResetProgress && (
-        <div className="w-full flex justify-end mb-4 px-2">
+      {/* Action Row: Pip's Field Journal & Reset Button */}
+      <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-2.5 mb-5 px-1">
+        {onOpenJournal && (
+          <button
+            onClick={() => {
+              soundManager.playPop();
+              onOpenJournal();
+            }}
+            className="w-full sm:w-auto flex-1 flex items-center justify-between gap-3 bg-gradient-to-r from-amber-50 to-orange-50 hover:from-amber-100 hover:to-orange-100 border-2 border-amber-300 hover:border-amber-400 px-4 py-2.5 rounded-2xl shadow-xs transition active:scale-[0.98] cursor-pointer"
+          >
+            <div className="flex items-center gap-2.5">
+              <div className="w-9 h-9 rounded-xl bg-amber-500 text-white flex items-center justify-center text-lg shadow-inner">
+                📖
+              </div>
+              <div className="text-left">
+                <span className="text-xs sm:text-sm font-black text-amber-950 block leading-tight">
+                  Pip's Science Journal
+                </span>
+                <span className="text-[11px] font-bold text-amber-700 block">
+                  {completedTerms.length} of 10 Concepts Mastered • Tap to Review Cards
+                </span>
+              </div>
+            </div>
+            <span className="text-xs font-black text-amber-600 bg-white px-2.5 py-1 rounded-xl border border-amber-200 shadow-2xs">
+              Open ➔
+            </span>
+          </button>
+        )}
+
+        {/* Reset to Step 1 Button (for Parent / Testing) */}
+        {onResetProgress && (
           <button
             onClick={onResetProgress}
-            className="text-[11px] font-bold text-slate-500 hover:text-rose-600 bg-white hover:bg-rose-50 border border-slate-200 hover:border-rose-200 px-3 py-1.5 rounded-xl shadow-xs transition flex items-center gap-1 cursor-pointer"
+            className="text-[11px] font-bold text-slate-500 hover:text-rose-600 bg-white hover:bg-rose-50 border border-slate-200 hover:border-rose-200 px-3 py-2 rounded-xl shadow-xs transition flex items-center gap-1 cursor-pointer self-end sm:self-center"
             title="Start from the beginning (Position)"
           >
             <RotateCcw className="w-3 h-3" />
-            <span>Restart Map from Step 1</span>
+            <span>Restart Map</span>
           </button>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* Course Progression Trail */}
       <div className="w-full relative flex flex-col items-center">
